@@ -13,7 +13,7 @@ class MainFrame ( wx.Frame ):
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Aplicativo de Avaliação de Qualidade Visual", pos = wx.DefaultPosition, size = wx.Size( 500, 720), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 
@@ -144,9 +144,9 @@ class MainFrame ( wx.Frame ):
 	
 	# Virtual event handlers, overide them in your derived class
 	def solveFunc( self, event ):
-		orig = self.text.GetTextCtrlValue()
-		teste = self.text1.GetTextCtrlValue()
-		arquivo = self.text2.GetTextCtrlValue()
+		orig = self.text.GetPath()
+		teste = self.text1.GetPath()
+		arquivo = self.text2.GetPath()
 		psnr = self.m_checkBox8.GetValue()
 		mse = self.m_checkBox9.GetValue()
 		mssim = self.m_checkBox10.GetValue()

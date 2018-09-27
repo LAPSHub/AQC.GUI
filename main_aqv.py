@@ -29,17 +29,15 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
         if pearson:
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
-            f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
+            f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')  
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('PSNR')
             plt.grid()
             plt.show()
@@ -55,16 +53,14 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('MSE')
             plt.grid()
             plt.show()
@@ -80,16 +76,14 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('MSIM')
             plt.grid()
             plt.show()
@@ -105,20 +99,17 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('UQI')
             plt.grid()
-            plt.show()
-        
+            plt.show()        
     if snr:
         razao_outliers, coeficiente_spearman, coeficiente_pearson, coeficiente_anova_F, logistica, linear, a, b, t, x, y, down,up = avaliacao.avaliacao(5, arquivo, now)
         f.write('SNR' + '\n')
@@ -130,16 +121,14 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('SNR')
             plt.grid()
             plt.show()
@@ -155,16 +144,14 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('PBVIF')
             plt.grid()
             plt.show()
@@ -180,16 +167,14 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('NQM')
             plt.grid()
             plt.show()
@@ -205,16 +190,14 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             f.write('Coeficiente de Pearson: ' + str(coeficiente_pearson) + '\n')
         if anova:
             f.write('F-score da Analise de Variancia: ' + str(coeficiente_anova_F) + '\n')
-        if log:
-            f.write('Funcao Losgistica:' + logistica + '\n')
-            if plot:
-                graficos.grafico_levemberg(x, t)
-        if linear:
-            f.write('Regressao Linear:' + linear + '\n')
-            if plot:
-                graficos.grafico_linear(a, b, x)
         if plot:
             graficos.grafico(x, y, down, up)
+            if log:
+                f.write('Funcao Losgistica:' + logistica + '\n')
+                graficos.grafico_levemberg(x, t)
+            if lin:
+                graficos.grafico_linear(a, b, x)
+                f.write('Regressao Linear:' + linear + '\n')
             plt.xlabel('RMSE')
             plt.grid()
             plt.show()
