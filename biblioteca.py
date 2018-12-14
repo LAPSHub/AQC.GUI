@@ -4,6 +4,10 @@
 # Luana Goncalves, Leonardo Brito
 # 02.nov.2017
 
+"""
+Compare two or more images using MSE, PSNR, SNR, SSIM, UQI, PBVIF, MSSIM and
+NQM metrics."""
+
 import scipy.ndimage
 import matplotlib.pyplot as plt
 from numpy.ma.core import exp
@@ -17,25 +21,50 @@ from scipy.ndimage.filters import convolve as __convolve
 from scipy.ndimage.filters import correlate as __correlate
 from scipy.fftpack import fftshift as __fftshift
 
+def mse(ref, test):
 
-def mse(reference, query):
-    
-    (ref, que) = (reference.astype('double'), query.astype('double'))
-    diff = ref - que
+    """Computes the Mean Square Error (MSE) of two images.
+
+    value = mse(ref, test)
+
+    Parameters
+    ----------
+    ref      : original image data.
+    test     : modified image data to be compared.
+
+    Return
+    ----------
+    value    : MSE value
+    """    
+    (x, y) = (ref.astype('double'), test.astype('double'))
+    diff = x - y
     square = (diff ** 2)
     mean = square.mean()
     return mean
 
 
-def rmse(reference, query):
-    msev = mse(reference, query)
-    return np.sqrt(msev)
+def rmse(ref, test):
+    mse_ = mse(ref, test)
+    return np.sqrt(mse_)
 
 
-def psnr(reference, query, normal=(2**int(24) - 1)):
-    
-    normalization = float(normal)
-    msev = mse(reference, query)
+def psnr(ref, test):
+    """Computes the Peak Signal-to-Noise-Ratio (PSNR).
+
+    value = psnr(ref, test)
+
+    Parameters
+    ----------
+    ref      : original image data.
+    test     : modified image data to be compared.
+
+    Return
+    ----------
+    value    : PSNR value
+    """
+
+    normalization = float(2**int(24) - 1)
+    msev = mse(ref, test)
     if msev != 0:
         value = 10.0 * np.log10(normalization * normalization / msev)
     else:
@@ -43,10 +72,23 @@ def psnr(reference, query, normal=(2**int(24) - 1)):
     return value
 
 
-def snr(reference, query):
+def snr(ref, test):
+    """Computes the Signal-to-Noise-Ratio (SNR).
+
+    value = snr(ref, test)
+
+    Parameters
+    ----------
+    ref      : original image data.
+    test    : modified image data to be compared.
+
+    Return
+    ----------
+    value    : SNR value
+    """
     
-    signal_value = (reference.astype('double') ** 2).mean()
-    msev = mse(reference, query)
+    signal_value = (ref.astype('double') ** 2).mean()
+    msev = mse(ref, test)
     if msev != 0:
         value = 10.0 * np.log10(signal_value / msev)
     else:
@@ -54,54 +96,20 @@ def snr(reference, query):
     return value
 
 
-def ssim(reference, query):
-
-
-    def __get_kernels():
-        k1, k2, l = (0.01, 0.03, 255.0)
-        kern1, kern2 = map(lambda x: (x * l) ** 2, (k1, k2))
-        return kern1, kern2
-
-    def __get_mus(i1, i2):
-        mu1, mu2 = map(lambda x: __gaussian_filter(x, 1.5), (i1, i2))
-        m1m1, m2m2, m1m2 = (mu1 * mu1, mu2 * mu2, mu1 * mu2)
-        return m1m1, m2m2, m1m2
-
-    def __get_sigmas(i1, i2, delta1, delta2, delta12):
-        f1 = __gaussian_filter(i1 * i1, 1.5) - delta1
-        f2 = __gaussian_filter(i2 * i2, 1.5) - delta2
-        f12 = __gaussian_filter(i1 * i2, 1.5) - delta12
-        return f1, f2, f12
-
-    def __get_positive_ssimap(C1, C2, m1m2, mu11, mu22, s12, s1s1, s2s2):
-        num = (2 * m1m2 + C1) * (2 * s12 + C2)
-        den = (mu11 + mu22 + C1) * (s1s1 + s2s2 + C2)
-        return num / den
-
-    def __get_negative_ssimap(C1, C2, m1m2, m11, m22, s12, s1s1, s2s2):
-        (num1, num2) = (2.0 * m1m2 + C1, 2.0 * s12 + C2)
-        (den1, den2) = (m11 + m22 + C1, s1s1 + s2s2 + C2)
-        ssim_map = np.ones(img1.shape)
-        indx = (den1 * den2 > 0)
-        ssim_map[indx] = (num1[indx] * num2[indx]) / (den1[indx] * den2[indx])
-        indx = np.bitwise_and(den1 != 0, den2 == 0)
-        ssim_map[indx] = num1[indx] / den1[indx]
-        return ssim_map
-
-    (img1, img2) = (reference.astype('double'), query.astype('double'))
-    (m1m1, m2m2, m1m2) = __get_mus(img1, img2)
-    (s1, s2, s12) = __get_sigmas(img1, img2, m1m1, m2m2, m1m2)
-    (C1, C2) = __get_kernels()
-    if C1 > 0 and C2 > 0:
-        ssim_map = __get_positive_ssimap(C1, C2, m1m2, m1m1, m2m2, s12, s1, s2)
-    else:
-        ssim_map = __get_negative_ssimap(C1, C2, m1m2, m1m1, m2m2, s12, s1, s2)
-    ssim_value = ssim_map.mean()
-    return ssim_value
-
-
 def uqi(reference, query):
+    """Computes the Universal Quality Index (UQI).
 
+    value = uqi(reference, query
+
+    Parameters
+    ----------
+    reference: original image data.
+    query    : modified image data to be compared.
+
+    Return
+    ----------
+    value    : UQI value
+    """
     def __conv(x):
         window = np.ones((BLOCK_SIZE, BLOCK_SIZE))
         if len(x.shape) < 3:
@@ -138,7 +146,20 @@ def uqi(reference, query):
 
 
 def pbvif(reference, query):
+    """Computes the Pixel-Based Visual Information Fidelity (PB-VIF).
 
+    value = pbvif(reference, query)
+
+    Parameters
+    ----------
+    reference: original image data.
+    query    : modified image data to be compared.
+
+    Return
+    ----------
+    value    : PB-VIF value
+    """
+    
     def __get_sigma(win, ref, dist, mu1_sq, mu2_sq, mu1_mu2):
         sigma1_sq = __filter2(win, ref * ref) - mu1_sq
         sigma2_sq = __filter2(win, dist * dist) - mu2_sq
@@ -192,7 +213,19 @@ def pbvif(reference, query):
 
 
 def mssim(reference, query):
+    """Computes the Multi-Scale SSIM Index (MSSIM).
 
+    value = mssim(reference, query)
+
+    Parameters
+    ----------
+    reference: original image data.
+    query    : modified image data to be compared.
+
+    Return
+    ----------
+    value    : MSSIM value
+    """
     def __get_filt_kern():
         n = [131, -199, -101, 962, 932, 962, -101, -199, 131]
         d = [3463, 8344, 913, 2549, 1093, 2549, 913, 8344, 3463]
@@ -361,7 +394,19 @@ def __convert_to_luminance(x):
 
 
 def nqm(reference, query):
+    """Computes the NQM metric.
 
+    value = nqm(reference, query)
+
+    Parameters
+    ----------
+    reference: original image data.
+    query    : modified image data to be compared.
+
+    Return
+    ----------
+    value    : NQM value
+    """
 
     def __ctf(f_r):
         """ Bandpass Contrast Threshold Function for RGB"""
@@ -497,139 +542,82 @@ def nqm(reference, query):
     y = __compute_quality(y1, y2)
     return y
 
-
-def wsnr(reference, query):
-
-
-    def __genetate_meshgrid(x, y):
-        f = lambda u: u / 2 + 0.5 - 1
-        (H, W) = map(f, (x, y))
-        return (H, W)
-
-    def __create_complex_planes(x, y):
-        (H, W) = __genetate_meshgrid(x, y)
-        (xplane, yplane) = np.mgrid[-H:H + 1, -W:W + 1]
-        return (xplane, yplane)
-
-    def __get_evaluated_contrast_sensivity(plane):
-        w = 0.7
-        angle = np.angle(plane)
-        return ((1.0 - w) / 2.0) * np.cos(4.0 * angle) + (1.0 + w) / 2.0
-
-    def __get_radial_frequency(x, y):
-        (xplane, yplane) = __create_complex_planes(x, y)
-        nfreq = 60
-        plane = (xplane + 1.0j * yplane) / x * 2.0 * nfreq
-        s = __get_evaluated_contrast_sensivity(plane)
-        radfreq = abs(plane) / s
-        return radfreq
-
-    def __generate_CSF(radfreq):
-        a = -((0.114 * radfreq) ** 1.1)
-        csf = 2.6 * (0.0192 + 0.114 * radfreq) * np.exp(a)
-        f = radfreq < 7.8909
-        csf[f] = 0.9809
-        return csf
-
-    def __weighted_fft_domain(ref, quer, csf):
-        err = ref.astype('double') - quer.astype('double')
-        err_wt = __fftshift(np.fft.fft2(err)) * csf
-        im = np.fft.fft2(ref)
-        return (err, err_wt, im)
-
-    def __get_weighted_error_power(err_wt):
-        return (err_wt * np.conj(err_wt)).sum()
-
-    def __get_signal_power(im):
-        return (im * np.conj(im)).sum()
-
-    def __get_ratio(mss, mse):
-        if mse != 0:
-            ratio = 10.0 * np.log10(mss / mse)
-        else:
-            ratio = float("inf")
-        return np.real(ratio)
-
-    if not len(reference.shape) < 3:
-        reference = __convert_to_luminance(reference)
-        query = __convert_to_luminance(query)
-    size = reference.shape
-    (x, y) = (size[0], size[1])
-    radfreq = __get_radial_frequency(x, y)
-    csf = __generate_CSF(radfreq)
-    (err, err_wt, im) = __weighted_fft_domain(reference, query, csf)
-    mse = __get_weighted_error_power(err_wt)
-    mss = __get_signal_power(im)
-    ratio = __get_ratio(mss, mse)
-    return ratio
-
 def msim(img_mat_1, img_mat_2):
+    """Computes the Multi-Scale SSIM Index (MSSIM).
 
-    # Valores default devem ser fornecidos
+    value = msim(reference, query)
+
+    Parameters
+    ----------
+    img_mat_1: original image data.
+    img_mat_2: modified image data to be compared.
+
+    Return
+    ----------
+    value    : MSSIM value
+    """
+
     std =3
-    L = 6*std +1 # comprimento do filtro
-    window = signal.gaussian(L, std) # vetor Gaussiano unidimensional
-    #x = misc.lena()                  # imagem de entrada
+    L = 6*std +1 
+    window = signal.gaussian(L, std) 
+    
 
-    # kernel 2d (usando fft)
+    
     w = window.reshape((L,1))
     wt = np.transpose(w)
     h = w * wt
     soma = np.sum(h)
     h = h/soma
     
-    #print(h.shape)
-
-    #convertere para float
+    
     img_mat_1=img_mat_1.astype(np.float)
     img_mat_2=img_mat_2.astype(np.float)
 
-    #Squares of input matrices
+    
     img_mat_1_sq=img_mat_1**2
     img_mat_2_sq=img_mat_2**2
     img_mat_12=img_mat_1*img_mat_2
     
-    #Means obtained by Gaussian filtering of inputs
+    
     img_mat_mu_1=scipy.ndimage.filters.convolve(img_mat_1,h)
     img_mat_mu_2=scipy.ndimage.filters.convolve(img_mat_2,h)
         
-    #Squares of means
+    
     img_mat_mu_1_sq=img_mat_mu_1**2
     img_mat_mu_2_sq=img_mat_mu_2**2
     img_mat_mu_12=img_mat_mu_1*img_mat_mu_2
     
-    #Variances obtained by Gaussian filtering of inputs' squares
+    
     img_mat_sigma_1_sq=scipy.ndimage.filters.convolve(img_mat_1_sq,h)
     img_mat_sigma_2_sq=scipy.ndimage.filters.convolve(img_mat_2_sq,h)
     
-    #Covariance
+    
     img_mat_sigma_12=scipy.ndimage.filters.convolve(img_mat_12,h)
 
-    #Centered squares of variances
+    
     img_mat_sigma_1_sq=img_mat_sigma_1_sq-img_mat_mu_1_sq
     img_mat_sigma_2_sq=img_mat_sigma_2_sq-img_mat_mu_2_sq
     img_mat_sigma_12=img_mat_sigma_12-img_mat_mu_12;
 
     
-    #c1/c2 constants
-    #First use: manual fitting
+
     c_1=6.5025
     c_2=58.5225
     
-    #Second use: change k1,k2 & c1,c2 depend on L (width of color map)
+    
     l=255
     k_1=0.01
     c_1=(k_1*l)**2
     k_2=0.03
     c_2=(k_2*l)**2
     
-    #Numerator of SSIM
+    
     num_ssim=(2*img_mat_mu_12+c_1)*(2*img_mat_sigma_12+c_2)
-    #Denominator of SSIM
+    
     den_ssim=(img_mat_mu_1_sq+img_mat_mu_2_sq+c_1)*\
     (img_mat_sigma_1_sq+img_mat_sigma_2_sq+c_2)
-    #SSIM
+    
     ssim_map=num_ssim/den_ssim
-    #print ssim_map
-    index=np.average(ssim_map)
-    return index
+    
+    value = np.average(ssim_map)
+    return value

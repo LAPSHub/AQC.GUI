@@ -9,7 +9,8 @@ import wx.xrc
 import main_aqv
 
 class MainFrame ( wx.Frame ):
-	
+	"""A graphical user interface for performance characterization of visual quality metrics
+        """
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Aplicativo de Avaliação de Qualidade Visual", pos = wx.DefaultPosition, size = wx.Size( 500, 720), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		

@@ -4,6 +4,9 @@
 # Luana Goncalves, Leonardo de Brito
 # 02.jun.2017
 
+"""
+Manages the commands of user graphical interface."""
+
 import numpy as np
 import metricas as p
 import avaliacao
@@ -17,6 +20,32 @@ now = now[0:19]
 now = ' ' +now[0:13] + '-' +now[14:16]+'-'+now[17:19]
 
 def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, log, pearson, spearman, out, anova, plot):
+
+    """Manages the commands of user graphical interface.
+
+    value = mse(reference, query)
+
+    Parameters
+    ----------
+    orig     : original images directory.
+    teste    : test images directory.
+    arquivo  : subjective assessment file -format: original image + ' ' + test image + ' ' + subjective scores.
+    psnr     : CheckBox PSNR Boolean. 
+    mse      : CheckBox MSE Boolean. 
+    msim     : CheckBox MSIM Boolean.
+    uqi      : CheckBox UQI Boolean.
+    snr      : CheckBox SNR Boolean.
+    pbvif    : CheckBox PBVIF Boolean.
+    nqm      : CheckBox NQM Boolean.
+    rmse     : CheckBox RSME Boolean.
+    lin      : CheckBox linear regression Boolean.
+    log      : CheckBox logistic regression Boolean.
+    pearson  : CheckBox pearson Boolean.
+    spearman : CheckBox spearman Boolean.
+    out      : CheckBox outlier ratio Boolean.
+    anova    : CheckBox ANOVA Boolean.
+    plot     : CheckBox plots Boolean.
+    """   
     f = open('Avaliacao de Desempenho de Metricas de Qualidade Visual' + str(now)+ '.txt', 'a')
     a = p.metricas(orig, teste, now, arquivo)
     if psnr:
@@ -34,7 +63,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -57,7 +86,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -80,7 +109,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -103,7 +132,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -125,7 +154,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -148,7 +177,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -171,7 +200,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
@@ -194,7 +223,7 @@ def aqv(orig, teste, arquivo, psnr, mse, msim, uqi, snr, pbvif, nqm, rmse, lin, 
             graficos.grafico(x, y, down, up)
             if log:
                 f.write('Funcao Losgistica:' + logistica + '\n')
-                graficos.grafico_levemberg(x, t)
+                graficos.grafico_levenberg(x, t)
             if lin:
                 graficos.grafico_linear(a, b, x)
                 f.write('Regressao Linear:' + linear + '\n')
